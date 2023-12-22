@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@200;300;400;700;800;900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  backdrop-filter: grayscale(100%) blur(16px);
+  background-image: url(../images/background-space.jpg);
+  /* background-color: rgb(15, 15, 15); */
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: 100vh;
+  background-position: 50%;
+  padding: 0 12px;
+  color: white;
+}
+
+.hideoverlay {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+body::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+body,
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
