@@ -2,6 +2,8 @@ import Game from './layout/Game';
 import Achievements from './layout/Achievements';
 import Settings from './layout/Settings';
 import Layout from './layout/Layout';
+import Login from './layout/Login';
+import Signup from './layout/Signup';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
@@ -69,6 +71,8 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/signup" element={<Signup />} />
         <Route element={<Layout />}>
           <Route
             path="/"
