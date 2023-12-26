@@ -3,6 +3,7 @@ import Upgrades from './Upgrades';
 import Clicker from './Clicker';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 
 function Game({
   userData,
@@ -12,6 +13,8 @@ function Game({
   addTaps,
   updateLocalStorage,
 }) {
+  const navigate = useNavigate();
+
   const upgradeClicks = (amount, name, price) => {
     if (price <= userData.taps) {
       if (userData.upgrades[name] > 0) {
@@ -46,6 +49,21 @@ function Game({
       },
     }));
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem('accessToken');
+
+    fetch('http://localhost:5000/api/protected', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }).then((response) => {
+      if (!response.ok) {
+        localStorage.removeItem('accessToken');
+        navigate('/login');
+      }
+    });
+  }, []);
 
   useEffect(() => {
     let total = 0;

@@ -1,9 +1,39 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-function Login() {
-  const handleSubmit = (e) => {
+function Login({ fetchData }) {
+  const [message, setMessage] = useState('');
+  const [messageColor, setMessageColor] = useState('rgb(34, 139, 34)');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle login logic here
+
+    fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMessage(data.message);
+        setMessageColor(
+          data.status === 'success' ? 'rgb(34, 139, 34)' : 'rgb(178, 34, 34)'
+        );
+
+        // If login was successful, store the access token in local storage and redirect to home page
+        if (data.status === 'success') {
+          localStorage.setItem('accessToken', data.accessToken);
+          fetchData();
+          navigate('/');
+        }
+      })
+      .catch((error) => console.error('Error:', error));
   };
 
   return (
@@ -20,11 +50,15 @@ function Login() {
             type="text"
             placeholder="Username"
             className="p-3 rounded-md focus:outline-none duration-300 focus:scale-110"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <input
             type="password"
             placeholder="Password"
             className="p-3 rounded-md focus:outline-none duration-300 focus:scale-110"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="submit"
@@ -33,9 +67,10 @@ function Login() {
             Log In
           </button>
         </form>
+        {message && <p style={{ color: messageColor }}>{message}</p>}
         <div className="mt-6">
           <Link to="/signup" className="text-white underline">
-            No account yet? Sign up.
+            Don't have an account? Sign up.
           </Link>
         </div>
       </div>

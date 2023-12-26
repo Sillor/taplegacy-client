@@ -1,8 +1,30 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 function Signup() {
-  const handleSubmit = (e) => {
+  const [message, setMessage] = useState('');
+  const [messageColor, setMessageColor] = useState('rgb(34, 139, 34)');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    fetch('http://localhost:5000/api/signup', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ username, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        setMessage(data.message);
+        setMessageColor(
+          data.status === 'success' ? 'rgb(34, 139, 34)' : 'rgb(178, 34, 34)'
+        );
+      })
+      .catch((error) => console.error('Error:', error));
   };
 
   return (
@@ -19,11 +41,15 @@ function Signup() {
             type="text"
             placeholder="Username"
             className="p-3 rounded-md focus:outline-none duration-300 focus:scale-110"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <input
             type="password"
             placeholder="Password"
             className="p-3 rounded-md focus:outline-none duration-300 focus:scale-110"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="submit"
@@ -32,6 +58,7 @@ function Signup() {
             Sign Up
           </button>
         </form>
+        {message && <p style={{ color: messageColor }}>{message}</p>}
         <div className="mt-6">
           <Link to="/login" className="text-white underline">
             Already have an account? Log in.

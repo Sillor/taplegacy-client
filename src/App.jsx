@@ -23,14 +23,28 @@ function App() {
     },
   });
 
+  function fetchData() {
+    fetch('http://localhost:5000/api/user/complete', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setUserData(data);
+      })
+      .catch((error) => console.error('Error:', error));
+  }
+
   useEffect(() => {
     const interval = setInterval(() => {
       setSeconds((oldSeconds) => oldSeconds + 1);
     }, 1000);
 
-    if (localStorage.getItem('user'))
-      setUserData(JSON.parse(localStorage.getItem('user')));
-    else localStorage.setItem('user', JSON.stringify(userData));
+    fetchData();
 
     return () => clearInterval(interval);
   }, []);
@@ -65,13 +79,24 @@ function App() {
   };
 
   const updateLocalStorage = () => {
-    localStorage.setItem('user', JSON.stringify(userData));
+    const token = localStorage.getItem('accessToken');
+    fetch('http://localhost:5000/api/user/update', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(userData),
+    })
+      .then((response) => response.json())
+      .then((data) => console.log(data))
+      .catch((error) => console.error('Error:', error));
   };
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login />} />
+        <Route path="/login" element={<Login fetchData={fetchData} />} />
         <Route path="/signup" element={<Signup />} />
         <Route element={<Layout />}>
           <Route
