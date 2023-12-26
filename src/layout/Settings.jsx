@@ -1,12 +1,26 @@
 import { Link, useNavigate } from 'react-router-dom';
 
-function Settings({ userData }) {
+function Settings({ userData, setUserData }) {
   const navigate = useNavigate();
 
   const handleRemoveData = () => {
-    localStorage.removeItem('user');
-    navigate('/');
-    location.reload();
+    // localStorage.removeItem('user');
+
+    fetch('http://localhost:5000/api/user/data', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setUserData({ taps: 0, upgrades: {}, stats: {} });
+        navigate('/');
+        window.location.reload();
+      })
+      .catch((error) => console.error('Error:', error));
   };
 
   return (
