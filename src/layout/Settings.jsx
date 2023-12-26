@@ -17,10 +17,16 @@ function Settings({ userData, setUserData }) {
       .then((data) => {
         console.log(data);
         setUserData({ taps: 0, upgrades: {}, stats: {} });
-        navigate('/');
-        window.location.reload();
+        navigate('/login');
       })
       .catch((error) => console.error('Error:', error));
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+    navigate('/');
+    window.location.reload();
   };
 
   return (
@@ -50,12 +56,21 @@ function Settings({ userData, setUserData }) {
           </p>
         </div>
 
-        <button
-          className="text-md font-extrabold border-2 bg-black bg-opacity-30 rounded-md p-2 text-red-600 mt-8 self-end"
-          onClick={handleRemoveData}
-        >
-          Remove data
-        </button>
+        <div className="flex gap-4">
+          <button
+            className="text-md font-extrabold border-2 bg-black bg-opacity-30 rounded-md p-2 text-red-600 mt-8 self-end"
+            onClick={handleRemoveData}
+          >
+            Remove data
+          </button>
+          <button
+            className="text-md font-extrabold border-2 bg-black bg-opacity-30 rounded-md p-2 mt-8 self-end"
+            onClick={handleLogout}
+          >
+            Log Out
+          </button>
+        </div>
+
         <Link to="/" className="hideoverlay self-end">
           <button className="text-md font-extrabold border-2 bg-black bg-opacity-30 rounded-md p-2">
             Back
