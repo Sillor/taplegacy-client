@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 
-function Login({ fetchData }) {
+function Login({ fetchData, startInterval }) {
   const [message, setMessage] = useState('');
   const [messageColor, setMessageColor] = useState('rgb(34, 139, 34)');
   const [username, setUsername] = useState('');
@@ -32,6 +32,7 @@ function Login({ fetchData }) {
           localStorage.setItem('refreshToken', data.refreshToken);
           fetchData();
           navigate('/');
+          startInterval();
         }
       })
       .catch((error) => console.error('Error:', error));

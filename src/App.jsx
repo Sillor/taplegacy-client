@@ -12,6 +12,7 @@ function App() {
   const [clicks, setClicks] = useState(0);
   const [countedCps, setCountedCps] = useState(0);
   const [perSec, setPerSec] = useState(0);
+  const [intervalId, setIntervalId] = useState(null);
   const [userData, setUserData] = useState({
     taps: 0,
     upgrades: {},
@@ -40,14 +41,26 @@ function App() {
   }
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((oldSeconds) => oldSeconds + 1);
-    }, 1000);
+    // const interval = setInterval(() => {
+    //   setSeconds((oldSeconds) => oldSeconds + 1);
+    // }, 1000);
 
     fetchData();
 
-    return () => clearInterval(interval);
+    return () => stopInterval();
   }, []);
+
+  const startInterval = () => {
+    setIntervalId(
+      setInterval(() => {
+        setSeconds((oldSeconds) => oldSeconds + 1);
+      }, 1000)
+    );
+  };
+
+  const stopInterval = () => {
+    clearInterval(intervalId);
+  };
 
   useEffect(() => {
     if (seconds >= 1) {
@@ -115,7 +128,12 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<Login fetchData={fetchData} />} />
+        <Route
+          path="/login"
+          element={
+            <Login fetchData={fetchData} startInterval={startInterval} />
+          }
+        />
         <Route path="/signup" element={<Signup />} />
         <Route element={<Layout />}>
           <Route
