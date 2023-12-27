@@ -4,6 +4,7 @@ import Settings from './layout/Settings';
 import Layout from './layout/Layout';
 import Login from './layout/Login';
 import Signup from './layout/Signup';
+import Leaderboard from './layout/Leaderboard';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React, { useState, useEffect } from 'react';
 
@@ -157,6 +158,7 @@ function App() {
             path="/settings"
             element={<Settings userData={userData} setUserData={setUserData} />}
           />
+          <Route path="/leaderboard" element={<Leaderboard />} />
         </Route>
       </Routes>
     </BrowserRouter>
