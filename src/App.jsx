@@ -35,7 +35,6 @@ function App() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setUserData(data);
       })
       .catch((error) => console.error('Error:', error));
@@ -122,7 +121,6 @@ function App() {
         }
         return response.json();
       })
-      .then((data) => console.log(data))
       .catch((error) => console.error('Error:', error));
   };
 
