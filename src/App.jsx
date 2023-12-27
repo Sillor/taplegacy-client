@@ -88,7 +88,26 @@ function App() {
       },
       body: JSON.stringify(userData),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        if (!response.ok) {
+          fetch('http://localhost:5000/api/token', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              refreshToken: localStorage.getItem('refreshToken'),
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              localStorage.setItem('accessToken', data.accessToken);
+              updateLocalStorage();
+            })
+            .catch((error) => console.error('Error:', error));
+        }
+        return response.json();
+      })
       .then((data) => console.log(data))
       .catch((error) => console.error('Error:', error));
   };

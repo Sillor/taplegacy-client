@@ -29,6 +29,7 @@ function Login({ fetchData }) {
         // If login was successful, store the access token in local storage and redirect to home page
         if (data.status === 'success') {
           localStorage.setItem('accessToken', data.accessToken);
+          localStorage.setItem('refreshToken', data.refreshToken);
           fetchData();
           navigate('/');
         }

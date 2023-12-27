@@ -61,6 +61,7 @@ function Game({
       if (!response.ok) {
         localStorage.removeItem('accessToken');
         navigate('/login');
+        window.location.reload();
       }
     });
   }, []);
